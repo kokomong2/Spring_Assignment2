@@ -3,7 +3,6 @@ package com.sparta.assignment3_test.model;
 import com.sparta.assignment3_test.dto.CommentRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import javax.persistence.*;
 
@@ -32,6 +31,10 @@ public class Comment {
     public Comment(CommentRequestDto requestDto, Long userId){
         this.memoId = requestDto.getMemoId();
         this.userId = userId;
+        this.comments = requestDto.getComments();
+    }
+
+    public void update(CommentRequestDto requestDto) {
         this.comments = requestDto.getComments();
     }
 }
