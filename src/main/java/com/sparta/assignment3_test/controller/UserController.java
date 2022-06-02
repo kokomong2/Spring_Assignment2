@@ -2,18 +2,22 @@ package com.sparta.assignment3_test.controller;
 
 
 import com.sparta.assignment3_test.dto.SignupRequestDto;
+import com.sparta.assignment3_test.exception.BadRequestException;
 import com.sparta.assignment3_test.model.User;
 import com.sparta.assignment3_test.repository.UserRepository;
 import com.sparta.assignment3_test.security.UserDetailsImpl;
 import com.sparta.assignment3_test.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.validation.BindingResult;
+
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class UserController {
@@ -40,15 +44,20 @@ public class UserController {
     }
 
     // 회원 가입 요청 처리
-    @PostMapping("/user/signup")
-    public String registerUser(SignupRequestDto requestDto) {
-        userService.registerUser(requestDto);
-        return "redirect:/user/login";
+    @PostMapping("/user/signup") // Error errors 를 BindingResult bindingResult로 수정함
+    public String registerUser(SignupRequestDto userDto) {
+        try{
+            userService.registerUser(userDto);
+            return "redirect:/user/login";
+        }catch (Exception e){
+            return "signup";
+        }
     }
+
     //전체 유저 조회
     @ResponseBody
     @GetMapping("/user/all")
-    public List<User> getUsers(@AuthenticationPrincipal UserDetailsImpl userDetails){
+    public List<User> getUsers(){
         return userRepository.findAll();
     }
 

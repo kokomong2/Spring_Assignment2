@@ -14,29 +14,11 @@
         static_idcheck = false;
         static_check =false;
         equal_check=false;
+
         function check_id(){
             let reg = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{3,}$/;
 
             let id = document.getElementById('id').value;
-            // $.ajax({
-            //     url: 'ID_Check',
-            //     type: 'POST',
-            //     dataType: 'text', //서버로부터 내가 받는 데이터의 타입
-            //     contentType : 'text/plain; charset=utf-8;',//내가 서버로 보내는 데이터의 타입
-            //     data: id ,
-            //     success: function(data){
-            //         if(data === 0){
-            //             document.getElementById('checkid').innerHTML='사용 가능한 아이디입니다.';
-            //             static_idcheck =true;
-            //         }else{
-            //             document.getElementById('checkid').innerHTML='중복된 아이디입니다.';
-            //             static_idcheck=false;
-            //         }
-            //     },
-            //     error: function (){
-            //         alert("성공못함")
-            //     }
-            // });
 
             if(false === reg.test(id)) {
                 // alert('아이디는 3자 이상이어야 하며, 숫자/대문자/소문자를 모두 포함해야 합니다.');
@@ -44,7 +26,7 @@
                 document.getElementById('checkid').style.color='red';
                 static_check=false;
             }else {
-                document.getElementById('checkid').innerHTML='사용가능한 아이디입니다.'
+                document.getElementById('checkid').innerHTML='아이디 조건에 맞습니다.'
                 document.getElementById('checkid').style.color='blue';
                 static_check=true;
             }
@@ -75,8 +57,9 @@
                 }
             }
         }
+        //                      ||!static_idcheck
         function final_check(){
-            if(!equal_check||!static_check||static_idcheck){
+            if(!equal_check||!static_check){
                 alert("아이디와 비밀번호를 확인 해주세요!")
                 return false;
             }else{
@@ -89,9 +72,8 @@
 <body>
 <div id="login-form">
     <div id="login-title" style="margin-bottom: 20px;" onclick="location.href='/'">Timeline Service</div>
-
+    <div><div class="login-id-label" style="float: left">아이디</div> <!--<button id="id_check_btn" onclick ="id_check()">중복확인</button>--></div>
     <form action="/user/signup" method="post" onsubmit="return final_check()">
-        <div class="login-id-label">아이디</div>
         <input type="text" name="username" placeholder="Username" class="login-input-box" id="id" onchange="check_id()">
         <div>&nbsp;<span id="checkid"></span></div>
         <div class="login-id-label">비밀번호</div>
