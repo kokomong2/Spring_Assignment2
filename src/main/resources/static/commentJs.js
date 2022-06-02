@@ -1,4 +1,5 @@
 let static_comment_username = "comment_user_name";
+let static_username = "static_username"
 
 $(document).ready(function () {
 
@@ -8,7 +9,7 @@ $(document).ready(function () {
 })
 
 function add_comments(memoId){
-
+    usercheck();
     let comments = $('#user_comment').val();
     let data={"memoId" : memoId,"comments":comments};
 
@@ -31,6 +32,7 @@ function getComments(memoId){
         url: `/api/comments/${memoId}`,
         success: function (response) {
             for (let i = 0; i < response.length; i++) {
+                userNameCheck();
                 let comment = response[i];
                 let comment_contents=comment.comments;
                 getCommentsUsername(comment.id);
@@ -48,7 +50,8 @@ function addCommentHTML(comment_contents,comment_username, commentid) {
 }
 
 function makeComment(comment_contents,comment_username,commentid) {
-    return `<div class="users_comments" id="users_comments" style="margin-top: 15px;">
+    if(comment_username ===static_username){
+        return `<div class="users_comments" id="users_comments" style="margin-top: 15px;">
                 <div class="card" style="box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);">
                     <!-- date/username 영역 -->
                     <div class="metadata" style="margin-bottom: 10px;">
@@ -73,6 +76,32 @@ function makeComment(comment_contents,comment_username,commentid) {
                     </div>
                 </div>
             </div>`;
+    }else{
+        return `<div class="users_comments" id="users_comments" style="margin-top: 15px;">
+                <div class="card" style="box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);">
+                    <!-- date/username 영역 -->
+                    <div class="metadata" style="margin-bottom: 10px;">
+                        <div class="username" style="margin-right: 5px;">
+                            ${comment_username}
+                        </div>
+                    </div>
+                    <!-- contents 조회/수정 영역-->
+                    <div class="contents">
+                        <div id="${commentid}-CommentContents" class="text" style="display: inline-block; width: 500px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            ${comment_contents}
+                        </div>
+                        <div id="${commentid}-commentEditarea" class="edit">
+                                <textarea id="${commentid}-CommentTextarea" class="te-edit" name="" id="" cols="30" rows="5"></textarea>
+                        </div>
+                    </div>
+                    <!-- 버튼 영역-->
+                    <div class="footer">
+                          
+                    </div>
+                </div>
+            </div>`;
+    }
+
 }
 function getCommentsUsername(id){
     $.ajax({
@@ -122,7 +151,6 @@ function submitEditComment(id){
         return;
     }
     let data={"comments":comments};
-    alert("comment : " + comments+ "commentid : "+id);
     $.ajax({
         type: "PUT",
         url: `/api/comments/${id}`,
@@ -144,4 +172,28 @@ function isValiableComments(comments){
         alert("댓글은 50자 이하로 입력해주세요");
         return false;
     }
+}
+function userNameCheck() {
+    $.ajax({
+        type: "POST",
+        url: "/user/userinfo",
+        async: false,
+        success: function (response) {
+            static_username=response;
+        },
+    });
+}
+function usercheck() {
+    $.ajax({
+        type: "POST",
+        url: "/user/userinfo",
+        async: false,
+        success: function (response) {
+        },
+        error: function () {
+            alert("로그인이 필요합니다.");
+            window.location.reload();
+            return;
+        }
+    });
 }

@@ -27,14 +27,19 @@
     </div>
 <div class="wrap">
 
-        <div class="header">
+        <div class="header" onclick="location.href='/'">
             <h2>Timeline Service</h2>
             <p>
-                <span th:text="${username}"></span>님 안녕하세요!<br>
+<!--                <span id = "username"></span>님 안녕하세요!<br>-->
                 공유하고 싶은 소식을 입력해주세요.
             </p>
         </div>
+        <div id="login_botton" style="margin-bottom: 20px;">
+            <button id="to_login" onclick="location.href='/user/login'" >로그인</button>
+            <button id="to_logout" onclick="location.href='/user/logout'">로그아웃</button>
+        </div>
         <div class="area-write" style="box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3); background-color: #ffffff;border-radius: 5px; border: none;">
+
             <input type="text" name="member_name" id="title" style="border-radius: 5px;margin-left: 10px ;border: none;height: 30px; width:200px; font-size:15px;" placeholder="제목 입력" >
                 <textarea class="field" placeholder="공유하고 싶은 소식을 입력해주세요" name="contents" id="contents" cols="30"
                           rows="10"></textarea>

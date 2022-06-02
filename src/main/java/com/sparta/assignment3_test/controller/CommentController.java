@@ -37,7 +37,7 @@ public class CommentController {
 
     @GetMapping("/api/comments/{id}")
     public List<Comment> getMemoComments(@PathVariable Long id){
-        return commentRepository.findAllByMemoId(id);
+        return commentRepository.findAllByMemoIdOrderByModifiedAtDesc(id);
     }
 
     @GetMapping("/api/comments/username/{id}")

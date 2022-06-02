@@ -11,37 +11,97 @@
     <meta charset="UTF-8">
     <title>회원가입 페이지</title>
     <script>
-        function onclickAdmin() {
-// Get the checkbox
-            var checkBox = document.getElementById("admin-check");
-// Get the output text
-            var box = document.getElementById("admin-token");
+        static_idcheck = false;
+        static_check =false;
+        equal_check=false;
+        function check_id(){
+            let reg = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{3,}$/;
 
-// If the checkbox is checked, display the output text
-            if (checkBox.checked == true){
-                box.style.display = "block";
-            } else {
-                box.style.display = "none";
+            let id = document.getElementById('id').value;
+            // $.ajax({
+            //     url: 'ID_Check',
+            //     type: 'POST',
+            //     dataType: 'text', //서버로부터 내가 받는 데이터의 타입
+            //     contentType : 'text/plain; charset=utf-8;',//내가 서버로 보내는 데이터의 타입
+            //     data: id ,
+            //     success: function(data){
+            //         if(data === 0){
+            //             document.getElementById('checkid').innerHTML='사용 가능한 아이디입니다.';
+            //             static_idcheck =true;
+            //         }else{
+            //             document.getElementById('checkid').innerHTML='중복된 아이디입니다.';
+            //             static_idcheck=false;
+            //         }
+            //     },
+            //     error: function (){
+            //         alert("성공못함")
+            //     }
+            // });
+
+            if(false === reg.test(id)) {
+                // alert('아이디는 3자 이상이어야 하며, 숫자/대문자/소문자를 모두 포함해야 합니다.');
+                document.getElementById('checkid').innerHTML='아이디는 3자 이상이어야 하며,\n 숫자/대,소문자를 모두 포함해야 합니다.'
+                document.getElementById('checkid').style.color='red';
+                static_check=false;
+            }else {
+                document.getElementById('checkid').innerHTML='사용가능한 아이디입니다.'
+                document.getElementById('checkid').style.color='blue';
+                static_check=true;
             }
+
+        }
+        function check_pw(){
+
+            let pw = document.getElementById('pw').value;
+            let id = document.getElementById('id').value;
+
+
+            // if(pw.length<4|| !pw.contains(id)) {
+            //     alert('비밀번호는 4자 이상이어야 하며, 아이디와 같은 값이 포함되면 안됩니다.');
+            // }else {
+            //     static_check = true;
+            //     console.log("통과");
+            // }
+            if(document.getElementById('pw').value !='' && document.getElementById('pw2').value!=''){
+                if(document.getElementById('pw').value==document.getElementById('pw2').value){
+                    document.getElementById('check').innerHTML='비밀번호가 일치합니다.'
+                    document.getElementById('check').style.color='blue';
+                    equal_check=true;
+                }
+                else{
+                    document.getElementById('check').innerHTML='비밀번호가 일치하지 않습니다.';
+                    document.getElementById('check').style.color='red';
+                    equal_check=false;
+                }
+            }
+        }
+        function final_check(){
+            if(!equal_check||!static_check||static_idcheck){
+                alert("아이디와 비밀번호를 확인 해주세요!")
+                return false;
+            }else{
+                return true;
+            }
+
         }
     </script>
 </head>
 <body>
 <div id="login-form">
-    <div id="login-title">Sign up Select Shop</div>
+    <div id="login-title" style="margin-bottom: 20px;" onclick="location.href='/'">Timeline Service</div>
 
-    <form action="/user/signup" method="post">
-        <div class="login-id-label">Username</div>
-        <input type="text" name="username" placeholder="Username" class="login-input-box">
-
-        <div class="login-id-label">Password</div>
-        <input type="password" name="password" class="login-input-box">
-
-        <div class="login-id-label">E-mail</div>
-        <input type="text" name="email" placeholder="E-mail" class="login-input-box">
-
+    <form action="/user/signup" method="post" onsubmit="return final_check()">
+        <div class="login-id-label">아이디</div>
+        <input type="text" name="username" placeholder="Username" class="login-input-box" id="id" onchange="check_id()">
+        <div>&nbsp;<span id="checkid"></span></div>
+        <div class="login-id-label">비밀번호</div>
+        <input type="password" name="password" class="login-input-box" id="pw" onchange="check_pw()">
+        <div class="login-id-label">비밀번호 확인</div>
+        <input type="password" class="login-input-box" id="pw2" onchange="check_pw()">
+<!--        <div class="login-id-label">E-mail</div>-->
+<!--        <input type="text" name="email" placeholder="E-mail" class="login-input-box">-->
         <div>
-            <input id="admin-token" type="password" name="adminToken" placeholder="관리자 암호" class="login-input-box" style="display:none">
+            &nbsp;<span id="check"></span>
         </div>
         <button id="login-id-submit">회원 가입</button>
     </form>

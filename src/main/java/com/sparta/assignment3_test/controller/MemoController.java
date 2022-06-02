@@ -23,7 +23,7 @@ public class MemoController {
     private final UserRepository userRepository;
 
     @GetMapping("/api/memos")
-    public List<Memo> getMemos(@AuthenticationPrincipal UserDetailsImpl userDetails){
+    public List<Memo> getMemos(){
         return memoRepository.findAllByOrderByModifiedAtDesc();
     }
 

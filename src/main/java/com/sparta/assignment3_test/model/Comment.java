@@ -9,7 +9,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 @Getter
-public class Comment {
+public class Comment extends Timestamped{
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
     private Long id;

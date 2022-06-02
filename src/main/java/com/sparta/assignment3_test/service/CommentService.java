@@ -14,7 +14,7 @@ import javax.transaction.Transactional;
 @Service
 public class CommentService {
 
-    CommentRepository commentRepository;
+    private final CommentRepository commentRepository;
 
     @Transactional
     public Long update(Long id, CommentRequestDto requestDto){

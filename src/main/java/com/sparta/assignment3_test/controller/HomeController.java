@@ -20,18 +20,24 @@ public class HomeController {
 
     @GetMapping("/")
     public String home(Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        model.addAttribute("username", userDetails.getUsername());
-        model.addAttribute("userId", userDetails.getUser().getId());
+
+        if (userDetails != null){
+            model.addAttribute("username", userDetails.getUsername());
+            model.addAttribute("userId", userDetails.getUser().getId());
+        }
+
         return "index";
     }
 
     @GetMapping("/memos/commentPage")
     public String getBoardContent(Model model, @RequestParam("memoid") Long memoid, @AuthenticationPrincipal UserDetailsImpl userDetails) throws Exception {
-        model.addAttribute("username",userDetails.getUsername());
-        model.addAttribute("commentsMemo", memoService.getMemos(memoid));
+        if (userDetails != null) {
+            model.addAttribute("username", userDetails.getUsername());
+        }
         Long userid = memoService.getMemos(memoid).getUserId();
         User user = userService.getUserDetail(userid);
-        model.addAttribute("memo_writername",user.getUsername());
+        model.addAttribute("memo_writername", user.getUsername());
+        model.addAttribute("commentsMemo", memoService.getMemos(memoid));
         return "commentPage";
     }
 }

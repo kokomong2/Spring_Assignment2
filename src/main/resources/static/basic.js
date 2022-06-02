@@ -1,7 +1,7 @@
-let static_username ="username";
+let static_username ="static_username";
 
 $(document).ready(function () {
-
+    userLoginCheck();
     getMessages();
 })
 
@@ -48,8 +48,8 @@ function makeMessage(title,id, username, contents, modifiedAt) {
                             <div id="${id}-username" class="username" style="margin-right: 15px;">
                                 ${username}
                             </div>
-                            <div class="date">
-                                ${modifiedAt}
+                            <div class="date"> 
+                            ${modifiedAt}                               
                             </div>
                         </div>
                         <!-- contents 조회/수정 영역-->
@@ -93,6 +93,7 @@ function isValidTitle(title) {
 
 
 function writePost() {
+    usercheck();
     let contents = $('#contents').val();
     let title = $('#title').val();
     if (isValidContents(contents) == false||isValidTitle(title)==false) {
@@ -116,5 +117,38 @@ function toCommentPage(memoid){
     let url = "/memos/commentPage";
     url = url + "?memoid="+memoid;
     location.href=url;
+}
+function userLoginCheck() {
+    $.ajax({
+        type: "POST",
+        url: "/user/userinfo",
+        async: false,
+        success: function (response) {
+            if(response===""){
+                $('#to_login').show();
+                $('#to_logout').hide();
+                static_username=response;
+            }else{
+                $('#to_login').hide();
+                $('#to_logout').show();
+            }
+
+        },
+    });
+}
+
+function usercheck() {
+    $.ajax({
+        type: "POST",
+        url: "/user/userinfo",
+        async: false,
+        success: function (response) {
+            if(response==="") {
+                alert("로그인이 필요합니다.");
+                window.location.reload();
+                return;
+            }
+        }
+    });
 }
 

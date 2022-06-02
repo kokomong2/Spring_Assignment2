@@ -51,4 +51,14 @@ public class UserController {
     public List<User> getUsers(@AuthenticationPrincipal UserDetailsImpl userDetails){
         return userRepository.findAll();
     }
+
+    @PostMapping("/user/userinfo")
+    @ResponseBody
+    public String getUserInfo(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        String username="";
+        if (userDetails != null) {
+            username= userDetails.getUser().getUsername();
+        }
+        return username;
+    }
 }
